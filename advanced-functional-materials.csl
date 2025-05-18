@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" version="1.0" class="in-text" default-locale="en-US">
   <info>
-    <title>Advanced Functional Materials (Modified Author Format)</title>
-    <id>http://example.com/styles/advanced-functional-materials-modified-author</id>
+    <title>Advanced Functional Materials (Hardcoded Author Approx.)</title>
+    <id>http://example.com/styles/afm-hardcoded-author</id>
     <category citation-format="numeric"/>
     <category field="chemistry"/>
-    <summary>Modified CSL to force author format LastName, Initials with numeric superscript citations</summary>
+    <summary>Approximate hardcoded author formatting with separated family names and initials</summary>
     <updated>2025-05-16T00:00:00+00:00</updated>
   </info>
 
-  <!-- Editor Macro -->
   <macro name="editor">
     <names variable="editor" prefix="(" suffix=")">
       <label form="short" suffix=": " text-case="capitalize-first"/>
@@ -17,18 +16,15 @@
     </names>
   </macro>
 
-  <!-- Author Macro: LastName, F. M. -->
-  <macro name="author">
-    <names variable="author" delimiter=", " delimiter-precedes-last="always">
-      <name
-        initialize="true"
-        initialize-with=". "
-        name-as-sort-order="all"
-        sort-separator=", "/>
-    </names>
+  <!-- Hardcoded Author Macro: family names first, then initials separated -->
+  <macro name="author-hardcoded">
+    <!-- Family names -->
+    <names variable="author" delimiter=", " delimiter-precedes-last="always" initialize="false" name-as-sort-order="all"/>
+    <text> </text>
+    <!-- Initials only -->
+    <names variable="author" delimiter=", " initialize="true" initialize-with=". " name-as-sort-order="all"/>
   </macro>
 
-  <!-- Publisher Macro -->
   <macro name="publisher">
     <group delimiter=", ">
       <text variable="publisher"/>
@@ -36,7 +32,6 @@
     </group>
   </macro>
 
-  <!-- Volume Macro -->
   <macro name="volume">
     <group delimiter=" ">
       <text term="volume" form="short" text-case="capitalize-first"/>
@@ -44,7 +39,6 @@
     </group>
   </macro>
 
-  <!-- Pages Macro -->
   <macro name="pages">
     <choose>
       <if variable="page" match="any">
@@ -57,7 +51,6 @@
     </choose>
   </macro>
 
-  <!-- Book Container Macro -->
   <macro name="book-container">
     <group delimiter=" ">
       <text term="in" text-case="capitalize-first"/>
@@ -65,14 +58,12 @@
     </group>
   </macro>
 
-  <!-- Issued Year Macro (Normal font weight) -->
   <macro name="issued">
     <date variable="issued" delimiter=" ">
       <date-part name="year"/>
     </date>
   </macro>
 
-  <!-- Full Issued Date Macro -->
   <macro name="full-issued">
     <date variable="issued" delimiter=" ">
       <date-part name="month" form="long" suffix=" "/>
@@ -81,7 +72,6 @@
     </date>
   </macro>
 
-  <!-- Edition Macro -->
   <macro name="edition">
     <choose>
       <if is-numeric="edition">
@@ -96,7 +86,6 @@
     </choose>
   </macro>
 
-  <!-- Citation Formatting: Superscript numeric with square brackets -->
   <citation collapse="citation-number">
     <sort>
       <key variable="citation-number"/>
@@ -106,11 +95,10 @@
     </layout>
   </citation>
 
-  <!-- Bibliography Layout -->
   <bibliography second-field-align="margin" entry-spacing="0">
     <layout suffix=".">
       <text variable="citation-number" prefix="[" suffix="] "/>
-      <text macro="author" suffix=", "/>
+      <text macro="author-hardcoded" suffix=", "/>
       <choose>
         <if type="article-magazine">
           <group delimiter=" ">
@@ -144,7 +132,6 @@
             <text macro="pages"/>
           </group>
         </else-if>
-        <!-- Journal article with title included -->
         <else-if type="article-journal article-magazine" match="any">
           <group delimiter=", ">
             <text variable="title" quotes="false"/>
