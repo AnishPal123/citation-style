@@ -71,7 +71,7 @@
     </group>
   </macro>
   <macro name="issued">
-    <date variable="issued" delimiter=" " font-weight="bold">
+    <date variable="issued" delimiter=" ">
       <date-part name="year"/>
     </date>
   </macro>
@@ -140,10 +140,12 @@
             <text macro="pages"/>
           </group>
         </else-if>
+        <!-- Modified journal article to include article title -->
         <else-if type="article-journal article-magazine" match="any">
-          <group delimiter=" ">
-            <text variable="container-title" font-style="italic" form="short"/>
-            <group delimiter=", ">
+          <group delimiter=", ">
+            <text variable="title" quotes="false"/>
+            <group delimiter=" ">
+              <text variable="container-title" font-style="italic" form="short"/>
               <text macro="issued"/>
               <text variable="volume" font-style="italic"/>
               <text variable="page-first" form="long"/>
