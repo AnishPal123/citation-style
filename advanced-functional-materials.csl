@@ -32,15 +32,15 @@
     </names>
   </macro>
   <macro name="author">
-    <names variable="author">
-      <name delimiter=", " delimiter-precedes-last="always" initialize-with=". "/>
-      <label form="short" prefix=", " text-case="capitalize-first"/>
-      <substitute>
-        <names variable="editor"/>
-        <text variable="title"/>
-      </substitute>
-    </names>
-  </macro>
+  <names variable="author">
+    <name delimiter=", " delimiter-precedes-last="always" initialize-with=". " name-as-sort-order="all"/>
+    <label form="short" prefix=", " text-case="capitalize-first"/>
+    <substitute>
+      <names variable="editor"/>
+      <text variable="title"/>
+    </substitute>
+  </names>
+</macro>
   <macro name="publisher">
     <group delimiter=", ">
       <text variable="publisher"/>
