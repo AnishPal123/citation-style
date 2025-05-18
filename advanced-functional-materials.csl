@@ -1,37 +1,175 @@
 <?xml version="1.0" encoding="utf-8"?>
 <style xmlns="http://purl.org/net/xbiblio/csl" version="1.0" class="in-text" default-locale="en-US">
   <info>
-    <title>Test LastName FirstInitial</title>
-    <id>http://example.com/test-lastname-initial</id>
+    <title>Advanced Functional Materials (Modified Author Format)</title>
+    <id>http://example.com/styles/advanced-functional-materials-modified-author</id>
     <category citation-format="numeric"/>
+    <category field="chemistry"/>
+    <summary>Modified CSL to force author format LastName, Initials with numeric superscript citations</summary>
+    <updated>2025-05-16T00:00:00+00:00</updated>
   </info>
 
-  <macro name="author">
-    <names variable="author">
-      <name
-        name-as-sort-order="all"
-        initialize="true"
-        initialize-with=". "
-        delimiter=", "
-        delimiter-precedes-last="always"/>
+  <!-- Editor Macro -->
+  <macro name="editor">
+    <names variable="editor" prefix="(" suffix=")">
+      <label form="short" suffix=": " text-case="capitalize-first"/>
+      <name sort-separator=", " initialize-with=". " name-as-sort-order="all" delimiter="; " delimiter-precedes-last="always"/>
     </names>
   </macro>
 
-  <citation>
-    <layout prefix="[" suffix="]" delimiter=",">
+  <!-- Author Macro: LastName, F. M. -->
+  <macro name="author">
+    <names variable="author" delimiter=", " delimiter-precedes-last="always">
+      <name
+        initialize="true"
+        initialize-with=". "
+        name-as-sort-order="all"
+        sort-separator=", "/>
+    </names>
+  </macro>
+
+  <!-- Publisher Macro -->
+  <macro name="publisher">
+    <group delimiter=", ">
+      <text variable="publisher"/>
+      <text variable="publisher-place"/>
+    </group>
+  </macro>
+
+  <!-- Volume Macro -->
+  <macro name="volume">
+    <group delimiter=" ">
+      <text term="volume" form="short" text-case="capitalize-first"/>
+      <text variable="volume"/>
+    </group>
+  </macro>
+
+  <!-- Pages Macro -->
+  <macro name="pages">
+    <choose>
+      <if variable="page" match="any">
+        <label variable="page" form="short" suffix=" "/>
+        <text variable="page"/>
+      </if>
+      <else-if type="article-journal">
+        <text variable="DOI" prefix="DOI "/>
+      </else-if>
+    </choose>
+  </macro>
+
+  <!-- Book Container Macro -->
+  <macro name="book-container">
+    <group delimiter=" ">
+      <text term="in" text-case="capitalize-first"/>
+      <text variable="container-title" font-style="italic"/>
+    </group>
+  </macro>
+
+  <!-- Issued Year Macro (Normal font weight) -->
+  <macro name="issued">
+    <date variable="issued" delimiter=" ">
+      <date-part name="year"/>
+    </date>
+  </macro>
+
+  <!-- Full Issued Date Macro -->
+  <macro name="full-issued">
+    <date variable="issued" delimiter=" ">
+      <date-part name="month" form="long" suffix=" "/>
+      <date-part name="day" suffix=", "/>
+      <date-part name="year"/>
+    </date>
+  </macro>
+
+  <!-- Edition Macro -->
+  <macro name="edition">
+    <choose>
+      <if is-numeric="edition">
+        <group delimiter=" ">
+          <number variable="edition" form="ordinal"/>
+          <text term="edition" form="short"/>
+        </group>
+      </if>
+      <else>
+        <text variable="edition" suffix="."/>
+      </else>
+    </choose>
+  </macro>
+
+  <!-- Citation Formatting: Superscript numeric with square brackets -->
+  <citation collapse="citation-number">
+    <sort>
+      <key variable="citation-number"/>
+    </sort>
+    <layout delimiter="," vertical-align="sup" prefix="[" suffix="]">
       <text variable="citation-number"/>
     </layout>
   </citation>
 
-  <bibliography>
-    <layout>
+  <!-- Bibliography Layout -->
+  <bibliography second-field-align="margin" entry-spacing="0">
+    <layout suffix=".">
       <text variable="citation-number" prefix="[" suffix="] "/>
       <text macro="author" suffix=", "/>
-      <text variable="title" suffix=", "/>
-      <text variable="container-title" font-style="italic" suffix=", "/>
-      <text variable="issued" suffix=", "/>
-      <text variable="volume" font-style="italic" suffix=", "/>
-      <text variable="page" suffix="."/>
+      <choose>
+        <if type="article-magazine">
+          <group delimiter=" ">
+            <text variable="container-title" font-style="italic" suffix="."/>
+            <text macro="edition"/>
+            <text macro="publisher"/>
+            <text macro="full-issued" suffix=","/>
+            <text macro="pages"/>
+          </group>
+        </if>
+        <else-if type="thesis">
+          <group delimiter=", ">
+            <group delimiter=". ">
+              <text variable="title"/>
+              <text variable="genre"/>
+            </group>
+            <text macro="publisher"/>
+            <text macro="issued"/>
+            <text macro="volume"/>
+            <text macro="pages"/>
+          </group>
+        </else-if>
+        <else-if type="chapter paper-conference" match="any">
+          <group delimiter=", ">
+            <group delimiter=" ">
+              <text macro="book-container"/>
+              <text macro="editor"/>
+            </group>
+            <text macro="publisher"/>
+            <text macro="issued"/>
+            <text macro="pages"/>
+          </group>
+        </else-if>
+        <!-- Journal article with title included -->
+        <else-if type="article-journal article-magazine" match="any">
+          <group delimiter=", ">
+            <text variable="title" quotes="false"/>
+            <group delimiter=" ">
+              <text variable="container-title" font-style="italic" form="short"/>
+              <text macro="issued"/>
+              <text variable="volume" font-style="italic"/>
+              <text variable="page-first" form="long"/>
+            </group>
+          </group>
+        </else-if>
+        <else>
+          <group delimiter=", ">
+            <group delimiter=" ">
+              <text variable="title" font-style="italic"/>
+              <text macro="editor"/>
+            </group>
+            <text macro="edition"/>
+            <text macro="volume"/>
+            <text macro="publisher"/>
+            <text macro="issued"/>
+            <text macro="pages"/>
+          </group>
+        </else>
+      </choose>
     </layout>
   </bibliography>
 </style>
